@@ -1,0 +1,11 @@
+.footer {
+  .container {
+    @include media-breakpoint-up(xl) {
+      max-width: 1076px;
+    }
+  }
+}
+
+.social_icon {
+  max-width: 30px;
+}

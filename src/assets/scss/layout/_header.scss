@@ -1,0 +1,143 @@
+.navbar {
+  height: 72px;
+  z-index: 100;
+
+  @include media-breakpoint-up(lg) {
+    height: 100px;
+  }
+
+  .container-lg {
+    @include media-breakpoint-up(xl) {
+      max-width: 1076px;
+    }
+  }
+
+  .w-100,
+  .vw-100 {
+    @include media-breakpoint-up(lg) {
+      width: auto;
+    }
+  }
+}
+
+.navbar-collapse {
+  z-index: 20;
+}
+
+.nav-item {
+  width: 100%;
+  @include media-breakpoint-up(lg) {
+    width: auto;
+  }
+}
+
+.nav-link {
+  color: $black;
+}
+
+.nav-link-bg {
+  &:hover {
+    background: $nature-95;
+    border: 1px solid $nature-80;
+
+    @include media-breakpoint-up(lg) {
+      background: $primary-99 !important;
+      border: 0 !important;
+      color: $secondary-40;
+    }
+  }
+}
+
+.navbar-toggler {
+  border: none;
+}
+
+.tab {
+  background-color: transparent;
+  width: 100%;
+  border: none;
+  cursor: pointer;
+  z-index: 2;
+  transition: color 0.3s;
+}
+
+.tab-background {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 50%;
+  height: 100%;
+  background-color: $primary-70;
+  transition: transform 0.5s ease;
+  z-index: 1;
+  border-radius: 12px;
+}
+
+.tab.active {
+  color: $white;
+}
+
+.hidden {
+  display: none !important;
+}
+
+.submit-btn {
+  cursor: pointer;
+  transition: background-color 0.3s;
+}
+
+.forgot-password {
+  text-decoration: none;
+  margin-bottom: 60px;
+
+  @include media-breakpoint-up(md) {
+    margin-bottom: 60px;
+  }
+}
+
+.signup-text {
+  margin-top: 20px;
+}
+
+.signup-text a {
+  color: #b08b76;
+  text-decoration: none;
+}
+
+.social-btn {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  gap: 16px;
+  border: 1px solid black;
+  cursor: pointer;
+  width: 100%;
+  border-radius: 16px;
+  transition: 0.2s;
+
+  &:hover {
+    transform: scale(1.05);
+  }
+}
+
+.social-img {
+  width: 20px;
+  height: 20px;
+}
+
+.social-btn.facebook {
+  background-color: #3b5998;
+  color: white;
+}
+
+.social-btn.google {
+  background-color: white;
+  color: black;
+}
+
+.avatar {
+  width: 40px;
+  height: 40px;
+  object-fit: cover;
+  cursor: pointer;
+}

@@ -1,0 +1,33 @@
+.banner-title{
+    border-bottom: 2px dashed $primary-10;
+}
+thead tr{
+    border-top: 1px solid;
+    border-bottom: 2px solid;
+    position: sticky;
+    top: 0;
+    z-index: 1; 
+}
+tbody tr{
+    cursor: pointer;
+}
+.input-group-text{
+    border-right: none;
+}
+.form-control{
+    border-left: none;
+}
+.scrollbar{
+    overflow-y: scroll;
+    max-height: 700px;
+    &::-webkit-scrollbar{
+        width: 10px;
+    }
+    &::-webkit-scrollbar-track {
+        border-radius: 4px;
+    }
+    &::-webkit-scrollbar-thumb{
+        border-radius: 4px;
+        background-color: $nature-95;
+    }
+}

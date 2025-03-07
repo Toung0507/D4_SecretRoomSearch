@@ -1,0 +1,12 @@
+#about-us ,#terms-of-service ,#privacy-policy {
+    position: relative;
+  
+    &::before {
+      content: '';
+      display: block;
+      height: 102px;
+      margin-top: -102px;
+      visibility: hidden;
+    }
+  }
+  
