@@ -3,7 +3,7 @@
     "private": true,
     "version": "0.0.0",
     "type": "module",
-    "homepage": "https://ernie923.github.io/D4_SecretRoomSearch/",
+    "homepage": "https://Toung0507.github.io/D4_SecretRoomSearch/",
     "scripts": {
         "dev": "vite",
         "build": "vite build",
