@@ -1,0 +1,4 @@
+.formrequired::before {
+    content: "* ";
+    color: red;
+}

@@ -1,0 +1,71 @@
+/* 預設樣式 */
+:root {
+    --active-color: #0d6efd;
+    /* 活躍狀態顏色 */
+    --inactive-color: gray;
+    /* 非活躍狀態顏色 */
+}
+
+.progress-container {
+    display: flex;
+    justify-content: space-between;
+    position: relative;
+    margin-bottom: 30px;
+    width: 350px;
+    margin: 0 auto;
+    /* 讓容器置中 */
+}
+
+.progress-bar {
+    position: absolute;
+    top: 50%;
+    left: 0;
+    height: 3px;
+    background-color: var(--active-color);
+    z-index: -1;
+    transform: translateY(-50%);
+    transition: width 0.5s ease-in-out;
+}
+
+/* 步驟圓圈 */
+.circle {
+    position: relative;
+    width: 40px;
+    height: 40px;
+    background-color: var(--inactive-color);
+    border-radius: 50%;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    border: 3px solid var(--inactive-color);
+    transition: background-color 0.3s, border-color 0.3s;
+}
+
+.circle.active {
+    background-color: var(--active-color);
+    border-color: var(--active-color);
+}
+
+.step_name {
+    color: black;
+    position: absolute;
+    white-space: nowrap;
+    top: -40px;
+    /* 讓數字位於圓圈上方 */
+}
+
+
+.circle-number {
+    font-size: 18px;
+    font-weight: bold;
+    color: white;
+    position: absolute;
+    // top: -35px;
+    /* 讓數字位於圓圈上方 */
+}
+
+/* 按鈕 */
+.btn {
+    font-size: 14px;
+    padding: 8px 30px;
+}

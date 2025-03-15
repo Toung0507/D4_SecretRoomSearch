@@ -1,0 +1,71 @@
+.admin-bg {
+  background-color: #f3f4f6;
+  min-height: 100vh;
+}
+
+.breadcrumb-item {
+  display: flex;
+  align-items: center;
+}
+
+.form-control::placeholder {
+  color: #c6c6ca;
+}
+
+.table-container {
+  position: relative;
+}
+
+.table-scroll-container {
+  max-height: 55vh;
+  overflow-y: auto;
+  overflow-x: hidden;
+
+  &::-webkit-scrollbar {
+    width: 6px;
+    height: 0;
+  }
+
+  &::-webkit-scrollbar-horizontal {
+    display: none;
+  }
+
+  // Firefox
+  scrollbar-width: thin;
+
+  // 隱藏水平捲軸 (IE)
+  -ms-overflow-style: none;
+}
+
+.storeTable {
+  border-collapse: collapse;
+}
+
+.storeTable thead th {
+  position: sticky;
+  top: 0;
+  z-index: 1;
+}
+
+.storeTable th,
+.storeTable td {
+  border-bottom: $nature-95 1px solid;
+}
+
+.storeTable th {
+  color: $secondary-40;
+  background-color: $secondary-99;
+}
+
+.edit-btn {
+  width: 32px;
+  height: 32px;
+  border-radius: 8px;
+  padding: 0;
+  background-color: $nature-95;
+  border: none;
+
+  span {
+    color: #5f6368;
+  }
+}
