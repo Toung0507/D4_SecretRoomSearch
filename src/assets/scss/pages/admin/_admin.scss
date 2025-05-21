@@ -1,0 +1,85 @@
+.admin-bg {
+  background-color: #f3f4f6;
+  min-height: 100vh;
+}
+
+.breadcrumb-item {
+  display: flex;
+  align-items: center;
+}
+
+.form-control::placeholder {
+  color: #c6c6ca;
+}
+
+.table-container {
+  position: relative;
+}
+
+.table-scroll-container {
+  max-height: 55vh;
+  overflow-y: auto;
+  overflow-x: hidden;
+}
+
+.storeTable {
+  border-collapse: collapse;
+}
+
+.storeTable thead th {
+  position: sticky;
+  top: 0;
+  z-index: 1;
+}
+
+.storeTable th,
+.storeTable td {
+  border-bottom: $nature-95 1px solid;
+}
+
+.storeTable th {
+  color: $secondary-40;
+  background-color: $secondary-99;
+}
+
+.btn {
+  padding: 8px 12px;
+
+  &.btn-search:hover {
+    background-color: $primary-40;
+  }
+
+  &.btn-reset:hover {
+    background-color: $nature-40;
+  }
+
+  &.btn-search:focus {
+    background-color: $primary-50 !important;
+    box-shadow: none !important;
+    outline: none !important;
+  }
+
+  &.btn-reset:focus {
+    background-color: $secondary !important;
+    box-shadow: none !important;
+    outline: none !important;
+  }
+}
+
+.edit-btn {
+  width: 32px;
+  height: 32px;
+  border-radius: 8px;
+  padding: 0;
+  background-color: $nature-95;
+  border: none;
+
+  span {
+    color: #5f6368;
+  }
+}
+
+.card-admin:hover {
+  transform: translateY(-3px);
+  box-shadow: 0 6px 12px rgba(0, 0, 0, 0.15);
+}

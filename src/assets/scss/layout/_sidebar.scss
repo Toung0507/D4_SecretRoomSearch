@@ -1,0 +1,52 @@
+.sidebar {
+  position: fixed;
+  z-index: 10;
+  display: flex;
+}
+
+.ps-submenu-expand-icon span {
+  width: 10px !important;
+  height: 10px !important;
+}
+
+.ps-sidebar-root.css-1wvake5 {
+  position: fixed;
+}
+
+.ps-sidebar-container {
+  padding-top: 20px;
+  padding-bottom: 20px;
+  border-radius: 0 20px 20px 0;
+}
+
+.sidebar-toggle {
+  position: fixed;
+  top: 115px;
+  left: 270px;
+
+  .material-symbols-outlined {
+    font-style: 30px;
+  }
+}
+
+.ps-menu-button:not(.ps-active) {
+  &:hover {
+    background-color: #1d586c !important;
+  }
+}
+
+.ps-menu-button.ps-active {
+  background-color: #003546 !important;
+
+  &:hover {
+    background-color: #003546 !important;
+  }
+}
+
+.ps-submenu-content .ps-menu-button.ps-active {
+  background-color: #003546 !important;
+
+  &:hover {
+    background-color: #003546 !important;
+  }
+}

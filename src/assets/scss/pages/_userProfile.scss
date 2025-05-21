@@ -1,0 +1,30 @@
+.member-nav-item-active {
+    color: $secondary-40 !important;
+    padding-bottom: 8px !important;
+    border-bottom: 4px solid $secondary-40 !important;
+}
+
+.usermain {
+    background-color: #f3f4f6 !important;
+}
+
+.basicInfo {
+    border: 1px solid #FFFFFF;
+    background-color: #FFFFFF;
+}
+
+.ParticipatingGroupTitle {
+    border-radius: 8px 8px 0px 0px;
+    line-height: 120%;
+}
+
+.ParticipatingGroupThead {
+    border-top: 0px solid #FFFFFF00 !important;
+    border-left: 0px solid #FFFFFF00 !important;
+    border-right: 0px solid #FFFFFF00 !important;
+    border-bottom: 1px solid $nature-95 !important;
+}
+
+.commentButton:hover {
+    background: none
+}

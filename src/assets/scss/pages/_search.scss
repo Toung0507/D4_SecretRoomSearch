@@ -1,0 +1,157 @@
+.search-input,
+.form-select {
+  background-color: transparent;
+  /* 移除底色 */
+  //border: none; /* 移除邊框 */
+  box-shadow: none;
+  /* 移除陰影 */
+}
+
+.form-check-input {
+  appearance: auto;
+}
+
+.reset_button {
+  background-color: transparent;
+  /* 移除底色 */
+}
+
+// 遊戲區塊自定義
+.row1 {
+  margin-right: -6px;
+  margin-left: -6px;
+}
+
+.col1 {
+  padding-right: 6px;
+  padding-left: 6px;
+}
+
+.title-container {
+  position: relative;
+
+  .recommendation-title {
+    position: relative;
+
+    &::before {
+      content: "";
+      position: absolute;
+      bottom: -8px;
+      left: 50%;
+      transform: translateX(-50%);
+      width: 120%;
+      height: 24px;
+      background-color: $primary-80;
+      border-radius: 4px;
+      z-index: -1;
+    }
+  }
+}
+
+.card-recommend:hover {
+  background-color: $nature-90;
+}
+
+.dotted {
+  @media (min-width: 768px) {
+    border-right: 1px dotted #ccc5c2;
+  }
+}
+
+// 992px以上區塊
+@media (min-width: 992px) {
+  .row {
+    > .col2 {
+      padding-left: 8px;
+      padding-right: 8px;
+      margin-bottom: 24px;
+    }
+
+    // 四個一排的情況，每排的第四個元素
+    .col2:nth-child(4n) {
+      padding-right: 0; // 取消右邊的間隔
+    }
+
+    // 四個一排的情況，每排的第一個元素
+    .col2:nth-child(4n + 1) {
+      padding-left: 0; // 取消左邊的間隔
+    }
+
+    // 第一個到最後一排前的
+    // >.col2:nth-child(n + 1):nth-child(-n + 4) {}
+
+    // 最後一排
+    > .col2:nth-last-child(-n + 4) {
+      margin-bottom: 0 !important;
+    }
+  }
+}
+
+// 991以下的區塊
+@media (max-width: 991px) {
+  .row {
+    .col2 {
+      padding-left: 8px;
+      padding-right: 8px;
+      margin-bottom: 24px;
+    }
+
+    // 如果是三個一排的情況，每排的第三個元素
+    .col2:nth-child(3n) {
+      padding-right: 0; // 取消右邊的間隔
+    }
+
+    // 如果是三個一排的情況，每排的第一個元素
+    .col2:nth-child(3n + 1) {
+      padding-left: 0; // 取消左邊的間隔
+    }
+
+    // 第一個到最後一排前的
+    // >.col2:nth-child(n + 1):nth-child(-n + 6) {}
+
+    // 最後一排
+    > .col2:nth-last-child(-n + 2) {
+      margin-bottom: 0 !important;
+    }
+  }
+}
+
+// 767px以下的區塊，會跟991~768重複，所以需要將重複的padding拉回來
+@media (max-width: 767px) {
+  .row {
+    .col2 {
+      padding-left: 6px; // 左側的 padding
+      padding-right: 6px; // 右側的 padding
+      margin-bottom: 24px;
+    }
+
+    .col2:nth-child(3n) {
+      padding-left: 6px; // 左側的 padding
+      padding-right: 6px; // 右側的 padding
+      margin-bottom: 24px;
+    }
+
+    .col2:nth-child(3n + 1) {
+      padding-left: 6px; // 左側的 padding
+      padding-right: 6px; // 右側的 padding
+      margin-bottom: 24px;
+    }
+
+    // 如果是四個一排的情況，每排的第四個元素
+    .col2:nth-child(2n) {
+      padding-right: 0; // 取消右邊的間隔
+    }
+
+    .col2:nth-child(2n + 1) {
+      padding-left: 0; // 取消左邊的間隔
+    }
+
+    // 第一個到最後一排前的
+    // >.col2:nth-child(n + 1):nth-child(-n + 6) {}
+
+    // 最後一排
+    > .col2:nth-last-child(-n + 2) {
+      margin-bottom: 0 !important;
+    }
+  }
+}

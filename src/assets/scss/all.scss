@@ -1,0 +1,34 @@
+//google font
+@import url("https://fonts.googleapis.com/css2?family=Noto+Sans+TC:wght@100..900&display=swap");
+// material symbols
+@import url("https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined");
+
+//bootstrap
+@import "/node_modules/bootstrap/scss/functions";
+@import "./utils/variables";
+@import "/node_modules/bootstrap";
+
+//universal style
+@import "./base/base";
+
+//bootstrap api
+@import "./utils/utilities";
+@import "bootstrap/scss/utilities/api";
+
+//header, footer style
+@import "./layout/header.scss";
+@import "./layout/footer.scss";
+
+// components style
+@import "./layout/sidebar.scss";
+@import "./layout/ProgressBar";
+@import "./layout/RegisterThree";
+
+//custom pages style
+@import "./pages/index.scss";
+@import "./pages/game_content";
+@import "./pages/search";
+@import "./pages/about";
+@import "./pages/game_comment";
+@import "./pages/userProfile";
+@import "./pages/admin/admin";

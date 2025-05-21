@@ -1,0 +1,117 @@
+.game_content .container {
+  margin: 0 auto;
+
+  @include media-breakpoint-up(xl) {
+    max-width: 1076px;
+  }
+}
+
+.describe {
+  .title .text {
+    z-index: 2;
+  }
+
+  .rectangle {
+    z-index: 1;
+    width: 100px;
+    height: 16px;
+    top: 30%;
+
+    @include media-breakpoint-up(lg) {
+      width: 156px;
+      height: 24px;
+      right: -13px;
+      top: 40%;
+    }
+  }
+}
+
+.comment-item {
+  .image {
+    width: 40px;
+    height: 40px;
+  }
+
+  .triangle {
+    width: 0;
+    height: 0;
+    border-left: 10px solid transparent;
+    border-right: 10px solid transparent;
+    border-bottom: 20px solid $nature-95;
+  }
+}
+
+.others {
+  .title .text {
+    z-index: 2;
+  }
+
+  .rectangle {
+    z-index: 1;
+    width: 190px;
+    height: 16px;
+    top: 30%;
+
+    @include media-breakpoint-up(lg) {
+      width: 288px;
+      height: 24px;
+    }
+  }
+}
+
+.swiper {
+  padding-bottom: 50px;
+
+  .image {
+    height: 175px;
+    object-fit: cover;
+
+    @include media-breakpoint-up(md) {
+      height: 250px;
+    }
+
+    @include media-breakpoint-up(lg) {
+      height: 544px;
+    }
+  }
+}
+
+.swiper-pagination-bullet {
+  background-color: $nature-90;
+}
+
+.swiper-pagination-bullet-active {
+  background-color: $primary-50;
+}
+
+.swiper-button-next::after,
+.swiper-button-prev::after {
+  width: 40px;
+  height: 40px;
+  padding: 10.45px 14.64px;
+  font-size: 20px;
+  position: absolute;
+  color: $primary-99;
+  background-color: $primary-50;
+  border-radius: 50%;
+  box-shadow: 0px 4px 8px 0px #653d2733;
+}
+
+.swiper-button-next::after {
+  right: -10px;
+}
+
+.swiper-button-prev::after {
+  left: -10px;
+}
+
+.add-comment {
+  bottom: 20px;
+  right: 20px;
+
+  .material-symbols-outlined {
+    @include media-breakpoint-up(lg) {
+      font-size: 36px;
+    }
+  }
+}

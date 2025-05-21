@@ -1,0 +1,44 @@
+.box{
+    display: inline-flex;
+    flex-direction: row-reverse;
+    >label{
+        user-select:none;
+        &::after{
+            content: '☆';
+            font-size: 32px;
+        }
+        &:hover{
+            cursor: pointer;
+            &::after{
+                content: '★';
+                color: #ffd700;
+            }
+            ~label{
+                &::after{
+                    content: '★';
+                    color: #ffd700;
+                }
+            }
+        }
+    }
+    >input{
+        display: none;
+        &:checked{
+            +label{
+                &::after{
+                    content: '★';
+                    color: #ffd700;
+                }
+            }
+            ~label{
+                &::after{
+                    content: '★';
+                    color: #ffd700;
+                }
+            }
+        }
+    }
+}
+.btn:hover{
+    background: $secondary-50;
+}
