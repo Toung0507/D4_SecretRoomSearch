@@ -1,8 +1,8 @@
 import { useContext } from "react";
-import { registerInfo } from "../reducers/createContent";
+import { registerInfo } from "../../reducers/createContent";
 import { useForm } from "react-hook-form";
-import AddressForm from "./AddressForm";
 import PropTypes from "prop-types";
+import AddressForm from "../../layout/AddressForm";
 
 function RegisterStepBasicInfo({ userFormRef, storeFormRef, onSubmitUserSuccess, onSubmitStoreSuccess }) {
   const { userRegister, handleUserChange, handleStoreChange } = useContext(registerInfo);

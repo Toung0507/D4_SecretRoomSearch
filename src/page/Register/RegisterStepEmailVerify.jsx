@@ -1,5 +1,5 @@
 import { useContext, useEffect, useRef, useState } from "react";
-import { registerInfo } from "../reducers/createContent";
+import { registerInfo } from "../../reducers/createContent";
 import { RiCloseCircleLine } from "react-icons/ri";
 import { RiCheckboxCircleLine } from "react-icons/ri";
 
