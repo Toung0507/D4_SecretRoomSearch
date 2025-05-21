@@ -25,7 +25,7 @@ function AdminGame() {
         setGameData(res.data);
         setFilteredData(res.data);
       } catch (error) {
-        console.error(error);
+        console.log(error.response.data.errors[0]);
       }
     };
     getGameData();
@@ -92,23 +92,49 @@ function AdminGame() {
     setSortConfig({ key, direction });
 
     const sortedData = [...filteredData].sort((a, b) => {
-      if (key === "game_score" || key === "game_score_num") {
-        // 數字比較
-        const numA = parseFloat(a[key]);
-        const numB = parseFloat(b[key]);
+      // 處理數值型欄位
+      if (
+        key === "game_id" ||
+        key === "game_score" ||
+        key === "game_score_num"
+      ) {
+        const numA = parseFloat(a[key] || 0);
+        const numB = parseFloat(b[key] || 0);
+
+        return direction === "asc" ? numA - numB : numB - numA;
+      }
+
+      // 處理上/下架狀態
+      if (key === "game_isStock") {
+        // true (上架) 排在 false (下架) 前面或後面
+        const boolA = Boolean(a[key]);
+        const boolB = Boolean(b[key]);
 
         if (direction === "asc") {
-          return numA - numB;
+          return boolA === boolB ? 0 : boolA ? 1 : -1;
         } else {
-          return numB - numA;
+          return boolA === boolB ? 0 : boolA ? -1 : 1;
         }
-      } else {
-        // 一般字符串比較
+      }
+
+      // 標籤排序 - 針對特定標籤欄位進行排序
+      if (
+        key === "game_dif_tagname" ||
+        key === "game_main_tag1name" ||
+        key === "game_main_tag2name"
+      ) {
         if (direction === "asc") {
-          return a[key] > b[key] ? 1 : -1;
+          return String(a[key] || "").localeCompare(String(b[key] || ""));
         } else {
-          return a[key] < b[key] ? 1 : -1;
+          return String(b[key] || "").localeCompare(String(a[key] || ""));
         }
+      }
+
+      // 一般字符串比較
+      if (direction === "asc") {
+        return String(a[key] || "").localeCompare(String(b[key] || ""));
+      } else {
+        return String(b[key] || "").localeCompare(String(a[key] || ""));
       }
     });
 
@@ -139,7 +165,7 @@ function AdminGame() {
   };
 
   return (
-    <div className="admin-bg">
+    <div className="custom-adminBg">
       <div className="adminUser container pt-11 pb-6">
         <nav
           style={{ "--bs-breadcrumb-divider": "'>'" }}
@@ -190,34 +216,24 @@ function AdminGame() {
             </label>
             <select
               className="form-select border-black"
-              style={{
-                color:
-                  searchParams.is_stock === "全部狀態" ? "#C6C6CA" : "inherit",
-              }}
               id="is_stock"
               value={searchParams.is_stock}
               onChange={handleSearchChange}
             >
-              <option className="text-black" value="全部狀態">
-                全部狀態
-              </option>
-              <option className="text-pass" value="true">
-                上架
-              </option>
-              <option className="text-tertiary-90" value="false">
-                下架
-              </option>
+              <option value="全部狀態">全部狀態</option>
+              <option value="true">上架</option>
+              <option value="false">下架</option>
             </select>
           </div>
-          <div className="col-lg-1 col-12 d-flex align-items-end">
+          <div className="col-lg-1 d-flex align-items-end">
             <button
-              className="btn btn-search btn-primary-50 text-white form-control my-3"
+              className="btn btn-search btn-primary-50 text-white form-control my-3 my-lg-0"
               onClick={handleSearch}
             >
               搜尋
             </button>
           </div>
-          <div className="col-lg-1 col-12 d-flex align-items-end">
+          <div className="col-lg-1 d-flex align-items-end">
             <button
               className="btn btn-reset btn-outline-secondary form-control"
               onClick={handleReset}
@@ -261,42 +277,53 @@ function AdminGame() {
                   >
                     標籤 {getSortIcon("game_dif_tagname")}
                   </th>
-                  <th className="px-4 py-3 text-center">狀態</th>
+                  <th
+                    className="px-4 py-3 text-center"
+                    onClick={() => handleSort("game_isStock")}
+                  >
+                    狀態 {getSortIcon("game_isStock")}
+                  </th>
                 </tr>
               </thead>
               <tbody>
-                {filteredData.map((row) => (
-                  <tr key={row.game_id}>
-                    <td className="py-2 px-4">{row.game_id}</td>
-                    <td className="py-2 px-4">{row.game_name}</td>
-                    <td className="py-2 px-4 text-center">{row.game_score}</td>
-                    <td className="py-2 px-4 text-center">
-                      {row.game_score_num}
-                    </td>
-                    <td className="py-2 px-4">
-                      <span className="px-2 py-1 rounded-2 text-black bg-nature-95">
-                        {row.game_dif_tagname}
-                      </span>
-                      <span className="px-2 py-1 mx-2 rounded-2 text-black bg-nature-95">
-                        {row.game_main_tag1name}
-                      </span>
-                      <span className="px-2 py-1 rounded-2 text-black bg-nature-95">
-                        {row.game_main_tag2name}
-                      </span>
-                    </td>
-                    <td className="py-2 px-4 text-center">
-                      {row.game_isStock == true ? (
-                        <span className="px-2 py-1 rounded-2 text-black bg-pass">
-                          上架
+                {filteredData.length > 0 ? (
+                  filteredData.map((row) => (
+                    <tr key={row.game_id}>
+                      <td className="py-2 px-4">{row.game_id}</td>
+                      <td className="py-2 px-4">{row.game_name}</td>
+                      <td className="py-2 px-4 text-center">{row.game_score}</td>
+                      <td className="py-2 px-4 text-center">
+                        {row.game_score_num}
+                      </td>
+                      <td className="py-2 px-4">
+                        <span className="px-2 py-1 rounded-2 text-black bg-nature-95">
+                          {row.game_dif_tagname}
                         </span>
-                      ) : (
-                        <span className="px-2 py-1 rounded-2 text-black bg-tertiary-90">
-                          下架
+                        <span className="px-2 py-1 mx-2 rounded-2 text-black bg-nature-95">
+                          {row.game_main_tag1name}
                         </span>
-                      )}
-                    </td>
+                        <span className="px-2 py-1 rounded-2 text-black bg-nature-95">
+                          {row.game_main_tag2name}
+                        </span>
+                      </td>
+                      <td className="py-2 px-4 text-center">
+                        {row.game_isStock == true ? (
+                          <span className="px-2 py-1 rounded-2 text-black bg-pass">
+                            上架
+                          </span>
+                        ) : (
+                          <span className="px-2 py-1 rounded-2 text-black bg-tertiary-90">
+                            下架
+                          </span>
+                        )}
+                      </td>
+                    </tr>
+                  ))
+                ) : (
+                  <tr>
+                    <td className="text-center py-2" colSpan={6}>沒有符合的資料</td>
                   </tr>
-                ))}
+                )}
               </tbody>
             </table>
           </div>
@@ -306,67 +333,127 @@ function AdminGame() {
             filteredData.map((game) => (
               <div key={game.game_id} className="col">
                 <div className="card card-admin h-100">
-                  <div className="card-body row">
-                    <p className="id col-4">ID</p>
-                    <p className="game_name col-8">密室名稱</p>
-                    <p className="id col-4">{game.game_id}</p>
-                    <p className="game_name col-8">{game.game_name}</p>
-                    <p className="score col-4 mt-4">評分</p>
-                    <p className="review_num col-8 mt-4">評論人數</p>
-                    <p className="score col-4 mb-4">{game.game_score}</p>
-                    <p className="review_num col-8 mb-4">
-                      {game.game_score_num}
-                    </p>
-                    <p className="tags col-4">標籤</p>
-                    <p className="status col-8">狀態</p>
-                    <p className="tags col-4">
-                      <span
-                        className="px-1 py-1 rounded-2 text-black bg-nature-95"
-                        style={{ fontSize: "12px" }}
-                      >
-                        {game.game_dif_tagname}
-                      </span>
-                    </p>
-                    <div className="status col-8">
-                      {game.game_isStock == true ? (
+                  <div className="card-body">
+                    <div className="d-flex justify-content-between">
+                      <div className="d-flex align-items-center">
                         <span
-                          className="px-2 py-1 rounded-2 text-black bg-pass"
-                          style={{ fontSize: "12px" }}
+                          className="me-2 px-2 fs-6 rounded-3 bg-secondary-95"
+                          style={{ fontSize: "0.8rem" }}
                         >
-                          上架
+                          ID: {game.game_id}
                         </span>
-                      ) : (
-                        <span
-                          className="px-2 py-1 rounded-2 text-black bg-tertiary-90"
-                          style={{ fontSize: "12px" }}
-                        >
-                          下架
-                        </span>
-                      )}
-                    </div>
-                    <div className="col-12 text-nature-95">
-                      <hr
-                        style={{
-                          marginBottom: 0,
-                          height: "2px",
-                          borderWidth: "2px",
-                        }}
-                      />
-                    </div>
-                    <div className="col-12 d-flex justify-content-end mt-2">
-                      <button
-                        className="edit-btn d-flex align-items-center justify-content-center"
-                        onClick={() => handleShowModal(store)}
-                      >
+                        <p className="fw-bold fs-1">{game.game_name}</p>
+                      </div>
+                      <button className="edit-btn d-flex align-items-center justify-content-center">
                         <span className="material-symbols-outlined">edit</span>
                       </button>
+                    </div>
+                    <div className="status my-4">
+                      {game.game_isStock ? (
+                        <div
+                          className="d-inline-flex align-items-center bg-pass px-2 rounded-2 border border-success"
+                          style={{ height: "26px" }}
+                        >
+                          <span
+                            className="material-symbols-outlined me-1 text-success"
+                            style={{ fontSize: "1rem" }}
+                          >
+                            check_circle
+                          </span>
+                          <p
+                            className="text-success"
+                            style={{ fontSize: "0.8rem" }}
+                          >
+                            上架
+                          </p>
+                        </div>
+                      ) : (
+                        <div
+                          className="d-inline-flex align-items-center bg-tertiary-90 px-2 rounded-2 border border-tertiary-80"
+                          style={{ height: "26px" }}
+                        >
+                          <span
+                            className="material-symbols-outlined me-1 text-tertiary-50"
+                            style={{ fontSize: "1rem" }}
+                          >
+                            cancel
+                          </span>
+                          <p
+                            className="text-tertiary-50"
+                            style={{ fontSize: "0.8rem" }}
+                          >
+                            下架
+                          </p>
+                        </div>
+                      )}
+                    </div>
+                    <div className="content row row-cols-2">
+                      <div className="score d-flex align-items-center">
+                        <span className="material-symbols-outlined me-1 text-nature-50">
+                          star
+                        </span>
+                        <div className="d-flex flex-column">
+                          <p
+                            className="text-nature-50"
+                            style={{ fontSize: "0.8rem" }}
+                          >
+                            評分
+                          </p>
+                          <p className="fw-bold" style={{ fontSize: "0.8rem" }}>
+                            {game.game_score}
+                          </p>
+                        </div>
+                      </div>
+                      <div className="review-count d-flex align-items-center">
+                        <span className="material-symbols-outlined me-1 text-nature-50">
+                          forum
+                        </span>
+                        <div className="d-flex flex-column">
+                          <p
+                            className="text-nature-50"
+                            style={{ fontSize: "0.8rem" }}
+                          >
+                            評論人數
+                          </p>
+                          <p className="fw-bold" style={{ fontSize: "0.8rem" }}>
+                            {game.game_score_num}
+                          </p>
+                        </div>
+                      </div>
+                    </div>
+                    <div className="text-nature-60">
+                      <hr />
+                    </div>
+                    <div className="tags">
+                      <div className="d-flex align-items-center mb-2">
+                        <span className="material-symbols-outlined me-1 text-nature-50">
+                          sell
+                        </span>
+                        <p
+                          className="text-nature-50"
+                          style={{ fontSize: "0.8rem" }}
+                        >
+                          標籤
+                        </p>
+                      </div>
+                      <div className="d-flex flex-wrap gap-1 mt-1">
+                        <span className="px-2 py-1 rounded-2 text-black bg-nature-95 fs-Caption">
+                          {game.game_dif_tagname}
+                        </span>
+                        <span className="px-2 py-1 rounded-2 text-black bg-nature-95 fs-Caption">
+                          {game.game_main_tag1name}
+                        </span>
+                        <span className="px-2 py-1 rounded-2 text-black bg-nature-95 fs-Caption">
+                          {game.game_main_tag2name}
+                        </span>
+                      </div>
                     </div>
                   </div>
                 </div>
               </div>
             ))
           ) : (
-            <div className="col-12">
+            <div className="col">
               <div className="card">
                 <div className="card-body text-center py-4">沒有符合的資料</div>
               </div>

@@ -37,19 +37,19 @@ function Footer() {
                 <h6 className="text-white fs-h6 mb-6">關於密室搜搜</h6>
                 <div className="fw-bold">
                   <NavLink
-                    to="About_us#about-us"
+                    to="About_us#custom-aboutUs"
                     className="mb-3 link-white fs-Body-2"
                   >
                     關於密室搜搜
                   </NavLink>
                   <NavLink
-                    to="About_us#terms-of-service"
+                    to="About_us#custom-termsOfService"
                     className="mb-3 link-white fs-Body-2"
                   >
                     服務條款
                   </NavLink>
                   <NavLink
-                    to="About_us#privacy-policy"
+                    to="About_us#custom-privacyPolicy"
                     className="link-white fs-Body-2"
                   >
                     隱私權政策

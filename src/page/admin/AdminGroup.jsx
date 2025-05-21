@@ -28,7 +28,6 @@ function AdminGroup() {
 
         // 提取所有不重複的 user_id
         const userIds = [...new Set(res.data.map((item) => item.user_id))];
-        console.log(userIds);
 
         try {
           // 平行發出所有請求
@@ -46,10 +45,10 @@ function AdminGroup() {
 
           setUserData(userMap);
         } catch (error) {
-          console.error("獲取用戶資料時出錯:", error);
+          console.log(error.response.data.errors[0]);
         }
       } catch (error) {
-        console.error(error);
+        console.log(error.response.data.errors[0]);
       }
     };
 
@@ -112,23 +111,55 @@ function AdminGroup() {
     setSortConfig({ key, direction });
 
     const sortedData = [...filteredData].sort((a, b) => {
+      // 處理特殊狀態排序
+      if (key === "group_isSuccessful") {
+        // 將狀態轉換為可排序的數值 (已結束:3 > 已取消:2 > 揪團成功:1 > 揪團中:0)
+        const getStatusValue = (row) => {
+          if (row.group_isEnd) return 3;
+          if (row.group_cancel) return 2;
+          if (row.group_isSuccessful) return 1;
+          return 0;
+        };
+
+        const valueA = getStatusValue(a);
+        const valueB = getStatusValue(b);
+
+        return direction === "asc" ? valueA - valueB : valueB - valueA;
+      }
+
+      // 處理數值型欄位
+      if (key === "group_id" || key === "group_member") {
+        const numA = parseInt(a[key], 10);
+        const numB = parseInt(b[key], 10);
+
+        return direction === "asc" ? numA - numB : numB - numA;
+      }
+
+      // 處理日期欄位
       if (key === "group_end_at" || key === "group_active_date") {
-        // 將日期字符串轉換為日期對象進行比較
         const dateA = new Date(a[key]);
         const dateB = new Date(b[key]);
 
+        return direction === "asc" ? dateA - dateB : dateB - dateA;
+      }
+
+      // 處理用戶ID (可能需要用到userData顯示名稱)
+      if (key === "user_id") {
+        const nameA = userData[a[key]]?.user_name || "";
+        const nameB = userData[b[key]]?.user_name || "";
+
         if (direction === "asc") {
-          return dateA - dateB;
+          return nameA.localeCompare(nameB);
         } else {
-          return dateB - dateA;
+          return nameB.localeCompare(nameA);
         }
+      }
+
+      // 一般字符串比較
+      if (direction === "asc") {
+        return String(a[key]).localeCompare(String(b[key]));
       } else {
-        // 一般字符串比較
-        if (direction === "asc") {
-          return a[key] > b[key] ? 1 : -1;
-        } else {
-          return a[key] < b[key] ? 1 : -1;
-        }
+        return String(b[key]).localeCompare(String(a[key]));
       }
     });
 
@@ -159,7 +190,7 @@ function AdminGroup() {
   };
 
   return (
-    <div className="admin-bg">
+    <div className="custom-adminBg">
       <div className="adminUser container pt-11 pb-6">
         <nav
           style={{ "--bs-breadcrumb-divider": "'>'" }}
@@ -193,7 +224,7 @@ function AdminGroup() {
               htmlFor="leader"
               className="form-label fs-Caption text-black"
             >
-              主糾人
+              主揪人
             </label>
             <input
               type="text"
@@ -213,30 +244,25 @@ function AdminGroup() {
             </label>
             <select
               className="form-select border-black"
-              style={{
-                color:
-                  searchParams.status === "全部狀態" ? "#C6C6CA" : "inherit",
-              }}
               id="status"
               value={searchParams.status}
               onChange={handleSearchChange}
             >
               <option value="全部狀態">全部狀態</option>
               <option value="揪團中">揪團中</option>
-              <option value="揪團成功">揪團成功</option>
-              <option value="已取消">已取消</option>
+              <option value="已棄團">已棄團</option>
               <option value="已結束">已結束</option>
             </select>
           </div>
-          <div className="col-lg-1 col-12 d-flex align-items-end">
+          <div className="col-lg-1 d-flex align-items-end">
             <button
-              className="btn btn-search btn-primary-50 text-white form-control my-3"
+              className="btn btn-search btn-primary-50 text-white form-control my-3 my-lg-0"
               onClick={handleSearch}
             >
               搜尋
             </button>
           </div>
-          <div className="col-lg-1 col-12 d-flex align-items-end">
+          <div className="col-lg-1 d-flex align-items-end">
             <button
               className="btn btn-reset btn-outline-secondary form-control"
               onClick={handleReset}
@@ -266,7 +292,7 @@ function AdminGroup() {
                     className="px-4 py-3"
                     onClick={() => handleSort("user_id")}
                   >
-                    主糾人 {getSortIcon("user_id")}
+                    主揪人 {getSortIcon("user_id")}
                   </th>
                   <th
                     className="px-4 py-3"
@@ -293,32 +319,37 @@ function AdminGroup() {
                 </tr>
               </thead>
               <tbody>
-                {filteredData.map((row) => (
-                  <tr key={row.group_id}>
-                    <td className="py-2 px-4">{row.group_id}</td>
-                    <td className="py-2 px-4">{row.game_name}</td>
-                    <td className="py-2 px-4">
-                      {userData[row.user_id]?.user_name || "未知用戶"}
-                    </td>
-                    <td className="py-2 px-4">{row.group_member}</td>
-                    <td className="py-2 px-4">
-                      <span
-                        className={`px-2 py-1 rounded-2 text-black ${getGroupStatusStyle(
-                          row
-                        )}`}
-                      >
-                        {getGroupStatus(row)}
-                      </span>
-                    </td>
-                    <td className="py-2 px-4">{row.group_end_at}</td>
-                    <td className="py-2 px-4">{row.group_active_date}</td>
-                    <td className="py-2 px-4 text-end">
-                      <button className="edit-btn d-flex align-items-center justify-content-center">
-                        <span className="material-symbols-outlined">edit</span>
-                      </button>
-                    </td>
+                {filteredData.length > 0 ? (
+                  filteredData.map((row) => (
+                    <tr key={row.group_id}>
+                      <td className="py-2 px-4">{row.group_id}</td>
+                      <td className="py-2 px-4">{row.game_name}</td>
+                      <td className="py-2 px-4">
+                        {userData[row.user_id]?.user_name || "未知用戶"}
+                      </td>
+                      <td className="py-2 px-4">{row.group_member}</td>
+                      <td className="py-2 px-4">
+                        <span
+                          className={`px-2 py-1 rounded-2 text-black ${getGroupStatusStyle(
+                            row
+                          )}`}
+                        >
+                          {getGroupStatus(row)}
+                        </span>
+                      </td>
+                      <td className="py-2 px-4">{row.group_end_at}</td>
+                      <td className="py-2 px-4">{row.group_active_date}</td>
+                      <td className="py-2 px-4 text-end">
+                        <button className="edit-btn d-flex align-items-center justify-content-center">
+                          <span className="material-symbols-outlined">edit</span>
+                        </button>
+                      </td>
+                    </tr>
+                  ))) : (
+                  <tr>
+                    <td className="text-center py-2" colSpan={7}>沒有符合的資料</td>
                   </tr>
-                ))}
+                )}
               </tbody>
             </table>
           </div>
@@ -327,57 +358,102 @@ function AdminGroup() {
           {filteredData.length > 0 ? (
             filteredData.map((group) => (
               <div key={group.group_id} className="col">
-                <div className="card card-admin h-100">
-                  <div className="card-body row">
-                    <p className="id col-4">ID</p>
-                    <p className="game_name col-8">密室名稱</p>
-                    <p className="id col-4">{group.group_id}</p>
-                    <p className="game_name col-8">{group.game_name}</p>
-                    <p className="leader col-4 mt-4">主糾人</p>
-                    <p className="member col-8 mt-4">總人數</p>
-                    <p className="leader col-4 mb-4">
-                      {userData[group.user_id]?.user_name || "未知用戶"}
-                    </p>
-                    <p className="member col-8 mb-4">{group.group_member}</p>
-                    <p className="status col-4">狀態</p>
-                    <p className="end_date col-8">揪團截止日期</p>
-                    <div className="status col-4">
-                      <span
-                        className={`px-2 py-1 rounded-2 text-black ${getGroupStatusStyle(
-                          group
-                        )}`}
-                        style={{ fontSize: "12px" }}
-                      >
-                        {getGroupStatus(group)}
-                      </span>
-                    </div>
-                    <p className="end_date col-8">{group.group_end_at}</p>
-                    <p className="active_date col-4 mt-4">活動日期</p>
-                    <p className="col-8 mt-4"></p>
-                    <p className="active_date col-4 mb-4">
-                      {group.group_active_date}
-                    </p>
-                    <p className="col-8 mb-4"></p>
-                    <div className="col-12 text-nature-95">
-                      <hr
-                        style={{
-                          marginBottom: 0,
-                          height: "2px",
-                          borderWidth: "2px",
-                        }}
-                      />
-                    </div>
-                    <div className="col-12 d-flex justify-content-end mt-2">
+                <div className="card card-admin">
+                  <div className="card-body">
+                    <div className="d-flex justify-content-between">
+                      <div className="d-flex align-items-center">
+                        <span
+                          className="me-2 px-2 fs-6 rounded-3 bg-secondary-95"
+                          style={{ fontSize: "0.8rem" }}
+                        >
+                          ID: {group.group_id}
+                        </span>
+                        <p className="fw-bold fs-1">{group.game_name}</p>
+                      </div>
                       <button className="edit-btn d-flex align-items-center justify-content-center">
                         <span className="material-symbols-outlined">edit</span>
                       </button>
+                    </div>
+                    <div className="status my-4">
+                      {getGroupStautsCard(group)}
+                    </div>
+                    <div className="content row row-cols-2">
+                      <div className="user d-flex align-items-center">
+                        <span className="material-symbols-outlined me-1 text-nature-50">
+                          person
+                        </span>
+                        <div className="d-flex flex-column">
+                          <p
+                            className="text-nature-50"
+                            style={{ fontSize: "0.8rem" }}
+                          >
+                            主揪人
+                          </p>
+                          <p className="fw-bold" style={{ fontSize: "0.8rem" }}>
+                            {userData[group.user_id]?.user_name || "未知用戶"}
+                          </p>
+                        </div>
+                      </div>
+                      <div className="user d-flex align-items-center">
+                        <span className="material-symbols-outlined me-1 text-nature-50">
+                          groups
+                        </span>
+                        <div className="d-flex flex-column">
+                          <p
+                            className="text-nature-50"
+                            style={{ fontSize: "0.8rem" }}
+                          >
+                            總人數
+                          </p>
+                          <p className="fw-bold" style={{ fontSize: "0.8rem" }}>
+                            {group.group_member}
+                          </p>
+                        </div>
+                      </div>
+                    </div>
+                    <div className="text-nature-60">
+                      <hr />
+                    </div>
+                    <div className="date row row-cols-2">
+                      <div className="end_date d-flex align-items-center">
+                        <span className="material-symbols-outlined me-1 text-nature-50">
+                          calendar_month
+                        </span>
+                        <div className="d-flex flex-column">
+                          <p
+                            className="text-nature-50"
+                            style={{ fontSize: "0.8rem" }}
+                          >
+                            揪團截止日期
+                          </p>
+                          <p className="fw-bold" style={{ fontSize: "0.8rem" }}>
+                            {group.group_end_at}
+                          </p>
+                        </div>
+                      </div>
+                      <div className="active_date d-flex align-items-center">
+                        <span className="material-symbols-outlined me-1 text-nature-50">
+                          calendar_month
+                        </span>
+                        <div className="d-flex flex-column">
+                          <p
+                            className="text-nature-50"
+                            style={{ fontSize: "0.8rem" }}
+                          >
+                            活動日期
+                          </p>
+                          <p className="fw-bold" style={{ fontSize: "0.8rem" }}>
+                            {group.group_active_date}
+                          </p>
+                        </div>
+                      </div>
                     </div>
                   </div>
                 </div>
               </div>
             ))
           ) : (
-            <div className="col-12">
+            <div className="col">
               <div className="card">
                 <div className="card-body text-center py-4">沒有符合的資料</div>
               </div>
@@ -390,26 +466,73 @@ function AdminGroup() {
 }
 
 const getGroupStatusStyle = (row) => {
-  if (row.group_isEnd) return "bg-nature-90";
+  if (row.group_isSuccessful) return "bg-nature-90";
 
-  if (row.group_cancel) return "bg-tertiary-90";
-
-  if (row.group_isSuccessful) {
-    return "bg-pass";
+  if (row.group_cancel) {
+    return "bg-tertiary-90";
   } else {
     return "bg-secondary-90";
   }
 };
 
 const getGroupStatus = (row) => {
-  if (row.group_isEnd) return "已結束";
+  if (row.group_isSuccessful) return "已結束";
 
-  if (row.group_cancel) return "已取消";
-
-  if (row.group_isSuccessful) {
-    return "揪團成功";
+  if (row.group_cancel) {
+    return "已棄團";
   } else {
     return "揪團中";
+  }
+};
+
+const getGroupStautsCard = (row) => {
+  if (row.group_isSuccessful) {
+    return (
+      <div
+        className="d-inline-flex align-items-center bg-nature-90 px-2 rounded-2 border border-nature-60"
+        style={{ height: "26px" }}
+      >
+        <span
+          className="material-symbols-outlined me-1 text-nature-60"
+          style={{ fontSize: "1rem" }}
+        >
+          event_busy
+        </span>
+        <p className="text-nature-50" style={{ fontSize: "0.8rem" }}>
+          已結束
+        </p>
+      </div>
+    );
+  }
+
+  if (row.group_cancel) {
+    return (
+      <div className="d-inline-flex align-items-center bg-primary-95 px-2 rounded-2 border border-primary-80">
+        <span className="material-symbols-outlined me-1 text-danger">
+          close_small
+        </span>
+        <p className="text-primary-50" style={{ fontSize: "0.8rem" }}>
+          已棄團
+        </p>
+      </div>
+    );
+  } else {
+    return (
+      <div
+        className="d-inline-flex align-items-center bg-secondary-90 px-2 rounded-2 border border-secondary-80"
+        style={{ height: "26px" }}
+      >
+        <span
+          className="material-symbols-outlined me-1 text-secondary-50"
+          style={{ fontSize: "0.8rem" }}
+        >
+          progress_activity
+        </span>
+        <p className="text-secondary-60" style={{ fontSize: "0.8rem" }}>
+          揪團中
+        </p>
+      </div>
+    );
   }
 };
 

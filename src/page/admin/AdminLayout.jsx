@@ -7,11 +7,8 @@ function AdminLayout() {
   const { user } = useSelector((state) => state.userInfo);
   const [isAdmin, setIsAdmin] = useState(false);
   useEffect(() => {
-    if (user?.user_role !== "管理者") {
-      console.log("你不是管理者");
-    } else if (user?.user_role === "管理者") {
+    if (user?.user_role === "管理者") {
       setIsAdmin(true);
-      console.log("你是管理者");
     }
   }, [user]);
 

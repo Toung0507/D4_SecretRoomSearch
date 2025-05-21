@@ -22,3 +22,7 @@ dist-ssr
 *.njsproj
 *.sln
 *.sw?
+
+#列出控管資料的全檔名
+#git ls-files > file_list.txt 
+file_list.txt

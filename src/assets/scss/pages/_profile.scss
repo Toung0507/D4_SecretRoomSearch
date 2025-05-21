@@ -1,0 +1,28 @@
+.custom-profileTab {
+  color: $nature-70;
+  padding: 8px 12px;
+
+  &.active {
+    color: $secondary-40 ;
+    padding-bottom: 6px;
+    border-bottom: 2px solid $secondary-40 ;
+  }
+
+  @include media-breakpoint-up(lg) {
+    padding: 12px;
+
+    &.active {
+      padding-bottom: 8px;
+      border-bottom: 4px solid $secondary-40;
+    }
+  }
+}
+
+
+.custom-profileMain {
+  background-color: $secondary-99;
+}
+
+.custom-userGroupTitle {
+  border-radius: 8px 8px 0px 0px;
+}

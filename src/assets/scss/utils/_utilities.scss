@@ -1,27 +1,13 @@
-//文字響應式
-$utilities: map-merge(
-  $utilities,
-  (
-    "font-size":
-      map-merge(
-        map-get($utilities, "font-size"),
-        (
-          responsive: true,
-        )
-      ),
-  )
-);
+// 新增讓字體大小可以為響應式，且font-size在_variable.scss中，已有重新定義
+$font-size-utilities: map-merge(map-get($utilities, "font-size"),
+    (responsive: true));
 
-.main-overlay::before {
-  content: "";
-  position: fixed;
-  width: 100%;
-  height: 100%;
-  background: rgba(0, 0, 0, 0.5);
-  z-index: 10;
-}
+// 新增行高並合併到原本的line-height上
+$line-height-utilities: map-merge(map-get($utilities, "line-height"),
+    (responsive: true, values: map-merge(map-get(map-get($utilities, "line-height"), "values"),
+        (normal: $line-height-normal))));
 
-//新增border-radius
+// 新增圓角的角度map
 $custom-radius: (
   0: 0,
   1: 4px,
@@ -35,23 +21,25 @@ $custom-radius: (
   9: 36px,
   10: 40px,
   11: 44px,
-  16: 64px,
+  16: 64px
 );
 
-$utilities: map-merge(
-  $utilities,
-  (
-    "rounded":
-      map-merge(
-        map-get($utilities, "rounded"),
-        (
-          responsive: true,
-          values:
-            map-merge(
-              map-get(map-get($utilities, "rounded"), "values"),
-              $custom-radius
-            ),
-        )
-      ),
-  )
-);
+// 新增圓角角度並合併到原本的rounded上
+$rounded-utilities: map-merge(map-get($utilities, "rounded"),
+    (responsive: true, values: map-merge(map-get(map-get($utilities, "rounded"), "values"), $custom-radius)));
+
+// 合併所有自定義的設定到 $utilities
+$utilities: map-merge($utilities,
+    ("font-size": $font-size-utilities,
+      "line-height": $line-height-utilities,
+      "rounded": $rounded-utilities ));
+
+// 設置主題覆蓋樣式
+.main-overlay::before {
+  content: "";
+  position: fixed;
+  width: 100%;
+  height: 100%;
+  background: rgba(0, 0, 0, 0.5);
+  z-index: 10;
+}

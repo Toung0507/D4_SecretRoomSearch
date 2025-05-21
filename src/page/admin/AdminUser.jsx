@@ -25,7 +25,7 @@ function AdminUser() {
         setUserData(res.data);
         setFilteredData(res.data);
       } catch (error) {
-        console.error(error);
+        console.log(error.response.data.errors[0]);
       }
     };
     getUserData();
@@ -129,7 +129,7 @@ function AdminUser() {
   };
 
   return (
-    <div className="admin-bg">
+    <div className="custom-adminBg">
       <div className="adminUser container pt-11 pb-6">
         <nav
           style={{ "--bs-breadcrumb-divider": "'>'" }}
@@ -180,9 +180,6 @@ function AdminUser() {
             </label>
             <select
               className="form-select border-black"
-              style={{
-                color: searchParams.role === "全部角色" ? "#C6C6CA" : "inherit",
-              }}
               id="role"
               value={searchParams.role}
               onChange={handleSearchChange}
@@ -193,7 +190,7 @@ function AdminUser() {
               <option value="管理者">管理者</option>
             </select>
           </div>
-          <div className="col-lg-1 col-12 d-flex align-items-end">
+          <div className="col-lg-1 d-flex align-items-end">
             <button
               className="btn btn-search btn-primary-50 text-white form-control my-3 my-lg-0"
               onClick={handleSearch}
@@ -201,7 +198,7 @@ function AdminUser() {
               搜尋
             </button>
           </div>
-          <div className="col-lg-1 col-12 d-flex align-items-end">
+          <div className="col-lg-1 d-flex align-items-end">
             <button
               className="btn btn-reset btn-outline-secondary form-control"
               onClick={handleReset}
@@ -280,45 +277,108 @@ function AdminUser() {
           {filteredData.length > 0 ? (
             filteredData.map((user) => (
               <div key={user.user_id} className="col">
-                <div className="card card-admin h-100">
-                  <div className="card-body row">
-                    <p className="id col-4">ID</p>
-                    <p className="user_name col-8">使用者名稱</p>
-                    <p className="id col-4">{user.user_id}</p>
-                    <p className="user_name col-8">{user.user_name}</p>
-                    <p className="email col-12 mt-4">信箱</p>
-                    <p className="email col-12 mb-4">{user.user_email}</p>
-                    <p className="role col-4">角色</p>
-                    <p className="login_source col-8">登入來源</p>
-                    <p className="role col-4 mb-4">{user.user_role}</p>
-                    <p className="login_source col-8">{user.user_reg_method}</p>
-                    <p className="create_time col-8">建立時間</p>
-                    <p className="create_time col-8">{user.user_create_at}</p>
-                    <div className="col-12 text-nature-95">
-                      <hr
-                        style={{
-                          marginBottom: 0,
-                          height: "2px",
-                          borderWidth: "2px",
-                        }}
-                      />
-                    </div>
-                    <div className="col-12 d-flex justify-content-end mt-2">
-                      <button
-                        className="edit-btn d-flex align-items-center justify-content-center"
-                        onClick={() => handleShowModal(store)}
-                      >
+                <div className="card card-admin">
+                  <div className="card-body">
+                    <div className="d-flex justify-content-between">
+                      <div className="d-flex align-items-center">
+                        <span
+                          className="me-2 px-2 fs-6 rounded-3 bg-secondary-95"
+                          style={{ fontSize: "0.8rem" }}
+                        >
+                          ID: {user.user_id}
+                        </span>
+                        <p className="fw-bold fs-5">{user.user_name}</p>
+                      </div>
+                      <button className="edit-btn d-flex align-items-center justify-content-center">
                         <span className="material-symbols-outlined">edit</span>
                       </button>
+                    </div>
+
+                    <div className="status my-4">
+                      <div
+                        className="d-inline-flex align-items-center bg-nature-90 px-2 rounded-2 border border-nature-60"
+                        style={{ height: "26px" }}
+                      >
+                        <span
+                          className="material-symbols-outlined me-2 text-nature-60"
+                          style={{ fontSize: "1rem" }}
+                        >
+                          person
+                        </span>
+                        <p
+                          className="text-nature-50"
+                          style={{ fontSize: "0.8rem" }}
+                        >
+                          {user.user_role}
+                        </p>
+                      </div>
+                    </div>
+
+                    <div className="content row row-cols-1">
+                      <div className="user d-flex align-items-center">
+                        <span className="material-symbols-outlined me-2 text-nature-50">
+                          mail
+                        </span>
+                        <div className="d-flex flex-column">
+                          <p
+                            className="text-nature-50"
+                            style={{ fontSize: "0.8rem" }}
+                          >
+                            信箱
+                          </p>
+                          <p className="fw-bold" style={{ fontSize: "0.8rem" }}>
+                            {user.user_email}
+                          </p>
+                        </div>
+                      </div>
+                    </div>
+
+                    <div className="text-nature-60">
+                      <hr />
+                    </div>
+
+                    <div className="date row row-cols-2">
+                      <div className="login-source d-flex align-items-center">
+                        <span className="material-symbols-outlined me-2 text-nature-50">
+                          login
+                        </span>
+                        <div className="d-flex flex-column">
+                          <p
+                            className="text-nature-50"
+                            style={{ fontSize: "0.8rem" }}
+                          >
+                            登入來源
+                          </p>
+                          <p className="fw-bold" style={{ fontSize: "0.8rem" }}>
+                            {user.user_reg_method}
+                          </p>
+                        </div>
+                      </div>
+                      <div className="create-time d-flex align-items-center">
+                        <span className="material-symbols-outlined me-2 text-nature-50">
+                          calendar_month
+                        </span>
+                        <div className="d-flex flex-column">
+                          <p
+                            className="text-nature-50"
+                            style={{ fontSize: "0.8rem" }}
+                          >
+                            建立時間
+                          </p>
+                          <p className="fw-bold" style={{ fontSize: "0.8rem" }}>
+                            {user.user_create_at}
+                          </p>
+                        </div>
+                      </div>
                     </div>
                   </div>
                 </div>
               </div>
             ))
           ) : (
-            <div className="col-12">
+            <div className="col">
               <div className="card">
-                <div className="card-body text-center py-4">沒有符合的資料</div>
+                <div className="card-body text-center py-2">沒有符合的資料</div>
               </div>
             </div>
           )}

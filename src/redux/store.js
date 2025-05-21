@@ -3,10 +3,10 @@ import userInfoSliceReducer from "./slices/userInfoSlice";
 import toastReducer from "./slices/toastSlice";
 
 const store = configureStore({
-    reducer: {
-        toast: toastReducer,
-        userInfo: userInfoSliceReducer,
-    }
+  reducer: {
+    toast: toastReducer,
+    userInfo: userInfoSliceReducer,
+  }
 });
 
 export default store;

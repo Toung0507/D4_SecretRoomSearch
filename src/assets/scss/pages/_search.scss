@@ -1,19 +1,13 @@
 .search-input,
 .form-select {
   background-color: transparent;
-  /* 移除底色 */
-  //border: none; /* 移除邊框 */
   box-shadow: none;
-  /* 移除陰影 */
-}
-
-.form-check-input {
-  appearance: auto;
 }
 
 .reset_button {
-  background-color: transparent;
-  /* 移除底色 */
+  &:hover {
+    color: darken(#202618, 15%); // hover 時加深15%
+  }
 }
 
 // 遊戲區塊自定義
@@ -53,15 +47,15 @@
 }
 
 .dotted {
-  @media (min-width: 768px) {
+  @include media-breakpoint-up(md) {
     border-right: 1px dotted #ccc5c2;
   }
 }
 
 // 992px以上區塊
-@media (min-width: 992px) {
+@include media-breakpoint-up(lg) {
   .row {
-    > .col2 {
+    >.col2 {
       padding-left: 8px;
       padding-right: 8px;
       margin-bottom: 24px;
@@ -81,14 +75,14 @@
     // >.col2:nth-child(n + 1):nth-child(-n + 4) {}
 
     // 最後一排
-    > .col2:nth-last-child(-n + 4) {
+    >.col2:nth-last-child(-n + 4) {
       margin-bottom: 0 !important;
     }
   }
 }
 
 // 991以下的區塊
-@media (max-width: 991px) {
+@include media-breakpoint-down(lg) {
   .row {
     .col2 {
       padding-left: 8px;
@@ -110,14 +104,14 @@
     // >.col2:nth-child(n + 1):nth-child(-n + 6) {}
 
     // 最後一排
-    > .col2:nth-last-child(-n + 2) {
+    >.col2:nth-last-child(-n + 2) {
       margin-bottom: 0 !important;
     }
   }
 }
 
 // 767px以下的區塊，會跟991~768重複，所以需要將重複的padding拉回來
-@media (max-width: 767px) {
+@include media-breakpoint-down(md) {
   .row {
     .col2 {
       padding-left: 6px; // 左側的 padding
@@ -150,8 +144,16 @@
     // >.col2:nth-child(n + 1):nth-child(-n + 6) {}
 
     // 最後一排
-    > .col2:nth-last-child(-n + 2) {
+    >.col2:nth-last-child(-n + 2) {
       margin-bottom: 0 !important;
     }
   }
 }
+
+.card-photo {
+  object-fit: cover;
+}
+
+/*
+首頁是
+*/

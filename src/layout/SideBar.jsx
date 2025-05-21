@@ -70,7 +70,7 @@ const CustomSidebar = () => {
             <MenuItem
               icon={<StoreFront />}
               active={isActive("/Admin")}
-              onClick={() => navigate("/Admin")}
+              onClick={() => navigate("/Admin/Store")}
             >
               店家
             </MenuItem>

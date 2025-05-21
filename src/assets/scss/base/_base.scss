@@ -1,35 +1,43 @@
 body {
-	background-color: $primary-99;
+  background-color: $primary-99;
 }
 
 a {
-	display: block;
-	text-decoration: none;
+  display: block;
+  text-decoration: none;
 }
-ul,li{
-	margin: 0;
-	padding: 0;
-	border: 0;
-}
+
 ul,
 li {
-	list-style-type: none;
+  margin: 0;
+  padding: 0;
+  border: 0;
+}
+
+ul,
+li {
+  list-style-type: none;
 }
 
 main {
-	margin-top: 72px;
+  margin-top: 72px;
 
-	@include media-breakpoint-up(lg) {
-			margin-top: 102px;
-	}
+  @include media-breakpoint-up(lg) {
+    margin-top: 102px;
+  }
 }
 
 p {
-	margin-bottom: 0;
+  margin-bottom: 0;
 }
 
-img{
-	max-width: 100%;
-	height: auto;
-	vertical-align: middle;
+img {
+  max-width: 100%;
+  height: auto;
+  vertical-align: middle;
+}
+
+.custom-labelRequired::before {
+  content: "* ";
+  color: red;
 }
