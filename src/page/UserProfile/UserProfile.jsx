@@ -3,7 +3,7 @@ import { useSelector } from "react-redux";
 import { Link, useParams } from "react-router-dom";
 import BasicInfo from "./BasicInfo";
 import ParticipatingGroup from "./ParticipatingGroup";
-import MyComments from "../../components/MyComments";
+import MyComments from "./MyComments";
 import { userContext } from "../../reducers/createContent";
 
 function UserProfile() {

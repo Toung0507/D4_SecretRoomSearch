@@ -1,14 +1,14 @@
 import { useCallback, useContext, useEffect, useRef, useState } from "react";
-import { userContext } from "../reducers/createContent";
+import { userContext } from "../../reducers/createContent";
 import axios from "axios";
 import { IoIosArrowForward } from "react-icons/io";
 import { TiStarFullOutline, TiStarOutline } from "react-icons/ti";
 import { Modal } from "bootstrap";
 import { Link } from "react-router-dom";
 import { useDispatch } from "react-redux";
-import { pushMessage } from "../redux/slices/toastSlice";
-import Toast from "../layout/Toast";
-import SmallLoadingSpinner from "./UI/smallLoadingSpinner";
+import { pushMessage } from "../../redux/slices/toastSlice";
+import Toast from "../../layout/Toast";
+import SmallLoadingSpinner from "../../components/UI/smallLoadingSpinner";
 const baseApi = import.meta.env.VITE_BASE_URL;
 
 const MyComments = () => {

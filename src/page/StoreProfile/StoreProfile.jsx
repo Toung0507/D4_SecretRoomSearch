@@ -1,9 +1,9 @@
 import { useCallback, useEffect, useState } from "react";
 import { useSelector } from "react-redux";
 import { Link, useParams } from "react-router-dom";
-import BasicStoreInfo from "../../components/BasicStoreInfo";
+import BasicStoreInfo from "./BasicStoreInfo";
 import axios from "axios";
-import MyGames from "../../components/MyGames";
+import MyGames from "./MyGames";
 import { userStoreContext } from "../../reducers/createContent";
 
 const baseApi = import.meta.env.VITE_BASE_URL;

@@ -1,10 +1,10 @@
 import { useContext, useEffect, useRef, useState } from "react";
-import { userStoreContext } from "../reducers/createContent";
+import { userStoreContext } from "../../reducers/createContent";
 import { useForm } from "react-hook-form";
 import { FaCheckDouble } from "react-icons/fa";
 import { VscError } from "react-icons/vsc";
 import { IoInformationCircle } from "react-icons/io5";
-import AddressForm from "../layout/AddressForm";
+import AddressForm from "../../layout/AddressForm";
 import dayjs from "dayjs";
 import axios from "axios";
 import { Modal } from "bootstrap";
@@ -12,9 +12,9 @@ import { useDispatch } from "react-redux";
 import {
   getUserInfoAsyncThunk,
   updateUser,
-} from "../redux/slices/userInfoSlice";
-import { pushMessage } from "../redux/slices/toastSlice";
-import Toast from "../layout/Toast";
+} from "../../redux/slices/userInfoSlice";
+import { pushMessage } from "../../redux/slices/toastSlice";
+import Toast from "../../layout/Toast";
 const baseApi = import.meta.env.VITE_BASE_URL;
 
 const BasicStoreInfo = () => {
